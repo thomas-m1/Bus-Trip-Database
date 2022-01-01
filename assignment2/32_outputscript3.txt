@@ -1,0 +1,291 @@
+Warning: Using a password on the command line interface can be insecure.
+--------------
+SELECT trip_name FROM bus_trip
+--------------
+
++------------------------------+
+| trip_name                    |
++------------------------------+
+| "Castles of Germany"         |
+| "Tuscany Sunsets"            |
+| "California Wines"           |
+| "Beaches Galore"             |
+| "Cottage Country"            |
+| "Arrivaderci Roma"           |
+| "Shetland and Orkney"        |
+| "Disney World and Sea World" |
+| "Mertle beach"               |
+| "Haunted house"              |
++------------------------------+
+10 rows in set (0.00 sec)
+
+--------------
+SELECT DISTINCT(last_name) FROM passenger
+--------------
+
++-----------+
+| last_name |
++-----------+
+| Simpson   |
+| Flanders  |
+| Klum      |
+| Scott     |
+| Schrute   |
+| Beesly    |
+| Bratton   |
+| Griffin   |
++-----------+
+8 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM bus_trip ORDER BY trip_name
+--------------
+
++---------+------------------------------+------------+------------+-----------------+-------------------+
+| trip_id | trip_name                    | start_date | end_date   | country_visited | license_plate_num |
++---------+------------------------------+------------+------------+-----------------+-------------------+
+|       6 | "Arrivaderci Roma"           | 2022-07-05 | 2022-07-15 | Italy           | TAXI111           |
+|       4 | "Beaches Galore"             | 2022-04-04 | 2022-04-14 | Bermuda         | TAXI222           |
+|       3 | "California Wines"           | 2022-05-05 | 2022-05-10 | USA             | VAN1111           |
+|       1 | "Castles of Germany"         | 2022-01-01 | 2022-01-17 | Germany         | VAN1111           |
+|       5 | "Cottage Country"            | 2022-06-01 | 2022-06-22 | Canada          | CAND123           |
+|       8 | "Disney World and Sea World" | 2022-06-10 | 2022-06-20 | USA             | VAN1111           |
+|      10 | "Haunted house"              | 2022-06-22 | 2022-06-26 | Canada          | CAND123           |
+|       9 | "Mertle beach"               | 2022-08-12 | 2022-08-25 | USA             | VAN1111           |
+|       7 | "Shetland and Orkney"        | 2022-09-09 | 2022-09-29 | UK              | TAXI111           |
+|       2 | "Tuscany Sunsets"            | 2022-03-03 | 2022-03-14 | Italy           | TAXI222           |
++---------+------------------------------+------------+------------+-----------------+-------------------+
+10 rows in set (0.00 sec)
+
+--------------
+SELECT trip_name, country_visited, start_date FROM bus_trip WHERE start_date > '2022/4/30'
+--------------
+
++------------------------------+-----------------+------------+
+| trip_name                    | country_visited | start_date |
++------------------------------+-----------------+------------+
+| "California Wines"           | USA             | 2022-05-05 |
+| "Cottage Country"            | Canada          | 2022-06-01 |
+| "Arrivaderci Roma"           | Italy           | 2022-07-05 |
+| "Shetland and Orkney"        | UK              | 2022-09-09 |
+| "Disney World and Sea World" | USA             | 2022-06-10 |
+| "Mertle beach"               | USA             | 2022-08-12 |
+| "Haunted house"              | Canada          | 2022-06-22 |
++------------------------------+-----------------+------------+
+7 rows in set (0.00 sec)
+
+--------------
+SELECT first_name, last_name, passport.birth_date FROM passenger INNER JOIN passport ON passenger.passport_num=passport.passport_num WHERE passport.citizenship = 'USA'
+--------------
+
++------------+-----------+------------+
+| first_name | last_name | birth_date |
++------------+-----------+------------+
+| Homer      | Simpson   | 1970-02-19 |
+| Marge      | Simpson   | 1972-08-12 |
+| Bart       | Simpson   | 2001-05-12 |
+| Lisa       | Simpson   | 2004-03-19 |
+| Maggie     | Simpson   | 2012-09-17 |
+| Ned        | Flanders  | 1950-06-11 |
+| Todd       | Flanders  | 1940-06-24 |
+| Peter      | Griffin   | 1955-09-22 |
++------------+-----------+------------+
+8 rows in set (0.00 sec)
+
+--------------
+SELECT trip_name, bus.capacity FROM bus_trip INNER JOIN bus ON bus_trip.license_plate_num=bus.license_plate_num WHERE bus_trip.start_date>='2022/4/1' AND bus_trip.start_date<='2022/9/1'
+--------------
+
++------------------------------+----------+
+| trip_name                    | capacity |
++------------------------------+----------+
+| "Cottage Country"            |       50 |
+| "Haunted house"              |       50 |
+| "Arrivaderci Roma"           |        4 |
+| "Beaches Galore"             |        3 |
+| "California Wines"           |       10 |
+| "Disney World and Sea World" |       10 |
+| "Mertle beach"               |       10 |
++------------------------------+----------+
+7 rows in set (0.00 sec)
+
+--------------
+SELECT *,CURDATE() FROM passport 
+WHERE passport.expiry_date<CURDATE() OR passport.expiry_date BETWEEN CURDATE() and ADDDATE(CURDATE(), INTERVAL 365 DAY)
+--------------
+
++--------------+-------------+-------------+------------+------------+
+| passport_num | citizenship | expiry_date | birth_date | CURDATE()  |
++--------------+-------------+-------------+------------+------------+
+| US23         | USA         | 2018-03-03  | 1940-06-24 | 2021-10-30 |
+| US89         | Germany     | 2022-02-02  | 1976-04-08 | 2021-10-30 |
+| US90         | Italy       | 2020-02-28  | 1980-04-04 | 2021-10-30 |
++--------------+-------------+-------------+------------+------------+
+3 rows in set (0.00 sec)
+
+--------------
+SELECT first_name, last_name, trip_name FROM bus_trip 
+INNER JOIN books ON bus_trip.trip_id = books.trip_id
+INNER JOIN passenger ON books.passenger_id = passenger.passenger_id
+WHERE passenger.last_name LIKE 'S%'
+--------------
+
++------------+-----------+------------------------------+
+| first_name | last_name | trip_name                    |
++------------+-----------+------------------------------+
+| Homer      | Simpson   | "Castles of Germany"         |
+| Marge      | Simpson   | "Castles of Germany"         |
+| Bart       | Simpson   | "Castles of Germany"         |
+| Lisa       | Simpson   | "Castles of Germany"         |
+| Maggie     | Simpson   | "Castles of Germany"         |
+| Dwight     | Schrute   | "Castles of Germany"         |
+| Dwight     | Schrute   | "Beaches Galore"             |
+| Homer      | Simpson   | "Arrivaderci Roma"           |
+| Marge      | Simpson   | "Arrivaderci Roma"           |
+| Bart       | Simpson   | "Arrivaderci Roma"           |
+| Lisa       | Simpson   | "Arrivaderci Roma"           |
+| Maggie     | Simpson   | "Arrivaderci Roma"           |
+| Homer      | Simpson   | "Shetland and Orkney"        |
+| Michael    | Scott     | "Shetland and Orkney"        |
+| Bart       | Simpson   | "Disney World and Sea World" |
+| Lisa       | Simpson   | "Disney World and Sea World" |
++------------+-----------+------------------------------+
+16 rows in set (0.00 sec)
+
+--------------
+SELECT COUNT(*) as castle_of_Germany_count, bus_trip.trip_name, bus_trip.trip_id FROM bus_trip
+INNER JOIN books ON bus_trip.trip_id = books.trip_id
+WHERE bus_trip.trip_name='"Castles of Germany"'
+--------------
+
++-------------------------+----------------------+---------+
+| castle_of_Germany_count | trip_name            | trip_id |
++-------------------------+----------------------+---------+
+|                       7 | "Castles of Germany" |       1 |
++-------------------------+----------------------+---------+
+1 row in set (0.00 sec)
+
+--------------
+SELECT country_visited, SUM(books.trip_price) FROM bus_trip
+INNER JOIN books ON bus_trip.trip_id=books.trip_id
+GROUP BY country_visited
+--------------
+
++-----------------+-----------------------+
+| country_visited | SUM(books.trip_price) |
++-----------------+-----------------------+
+| Bermuda         |                  1200 |
+| Canada          |                   900 |
+| Germany         |               2750.99 |
+| Italy           |                  1500 |
+| UK              |                  1200 |
+| USA             |                  1200 |
++-----------------+-----------------------+
+6 rows in set (0.00 sec)
+
+--------------
+SELECT passenger.first_name, passenger.last_name, passport.citizenship, bus_trip.trip_name, bus_trip.country_visited FROM bus_trip
+INNER JOIN books ON bus_trip.trip_id=books.trip_id
+INNER JOIN passenger ON books.passenger_id=passenger.passenger_id
+INNER JOIN passport ON passenger.passport_num=passport.passport_num
+WHERE NOT passport.citizenship=bus_trip.country_visited
+--------------
+
++------------+-----------+-------------+-----------------------+-----------------+
+| first_name | last_name | citizenship | trip_name             | country_visited |
++------------+-----------+-------------+-----------------------+-----------------+
+| Homer      | Simpson   | USA         | "Castles of Germany"  | Germany         |
+| Marge      | Simpson   | USA         | "Castles of Germany"  | Germany         |
+| Bart       | Simpson   | USA         | "Castles of Germany"  | Germany         |
+| Lisa       | Simpson   | USA         | "Castles of Germany"  | Germany         |
+| Maggie     | Simpson   | USA         | "Castles of Germany"  | Germany         |
+| Dwight     | Schrute   | Germany     | "Beaches Galore"      | Bermuda         |
+| Creed      | Bratton   | Germany     | "Beaches Galore"      | Bermuda         |
+| Homer      | Simpson   | USA         | "Arrivaderci Roma"    | Italy           |
+| Marge      | Simpson   | USA         | "Arrivaderci Roma"    | Italy           |
+| Bart       | Simpson   | USA         | "Arrivaderci Roma"    | Italy           |
+| Lisa       | Simpson   | USA         | "Arrivaderci Roma"    | Italy           |
+| Maggie     | Simpson   | USA         | "Arrivaderci Roma"    | Italy           |
+| Homer      | Simpson   | USA         | "Shetland and Orkney" | UK              |
+| Ned        | Flanders  | USA         | "Shetland and Orkney" | UK              |
+| Michael    | Scott     | Canada      | "Shetland and Orkney" | UK              |
+| Peter      | Griffin   | USA         | "Haunted house"       | Canada          |
++------------+-----------+-------------+-----------------------+-----------------+
+16 rows in set (0.00 sec)
+
+--------------
+SELECT DISTINCT bus_trip.trip_id, trip_name FROM bus_trip
+WHERE NOT EXISTS
+(SELECT DISTINCT trip_id FROM books
+WHERE books.trip_id=bus_trip.trip_id)
+--------------
+
++---------+--------------------+
+| trip_id | trip_name          |
++---------+--------------------+
+|       2 | "Tuscany Sunsets"  |
+|       3 | "California Wines" |
+|       5 | "Cottage Country"  |
+|       9 | "Mertle beach"     |
++---------+--------------------+
+4 rows in set (0.00 sec)
+
+--------------
+CREATE VIEW total_paid AS SELECT passenger.first_name, passenger.last_name, passport.citizenship, SUM(books.trip_price) AS sum_paid 
+FROM passenger, passport, books
+WHERE passenger.passport_num=passport.passport_num AND passenger.passenger_id=books.passenger_id
+GROUP BY passenger.first_name
+--------------
+
+Query OK, 0 rows affected (0.07 sec)
+
+--------------
+SELECT first_name, last_name, citizenship, MAX(sum_paid) AS sum_paid
+FROM total_paid
+WHERE sum_paid = (SELECT MAX(sum_paid) FROM total_paid)
+--------------
+
++------------+-----------+-------------+----------+
+| first_name | last_name | citizenship | sum_paid |
++------------+-----------+-------------+----------+
+| Homer      | Simpson   | USA         |     1400 |
++------------+-----------+-------------+----------+
+1 row in set (0.00 sec)
+
+--------------
+SELECT trip_name, COUNT(*) as booking_count FROM bus_trip
+INNER JOIN books ON bus_trip.trip_id = books.trip_id
+GROUP BY books.trip_id
+HAVING booking_count<4
+--------------
+
++-----------------------+---------------+
+| trip_name             | booking_count |
++-----------------------+---------------+
+| "Beaches Galore"      |             2 |
+| "Shetland and Orkney" |             3 |
+| "Haunted house"       |             1 |
++-----------------------+---------------+
+3 rows in set (0.00 sec)
+
+--------------
+SELECT bus_trip.trip_name as Bus_Trip_Name, bus.capacity as Capacity_of_Assigned_Bus, bus.license_plate_num as Current_Bus_Assigned_License_Plate, COUNT(*) as Current_Number_of_Passengers
+FROM bus
+INNER JOIN bus_trip ON bus.license_plate_num=bus_trip.license_plate_num
+INNER JOIN books ON bus_trip.trip_id=books.trip_id
+GROUP BY books.trip_id
+--------------
+
++------------------------------+--------------------------+------------------------------------+------------------------------+
+| Bus_Trip_Name                | Capacity_of_Assigned_Bus | Current_Bus_Assigned_License_Plate | Current_Number_of_Passengers |
++------------------------------+--------------------------+------------------------------------+------------------------------+
+| "Castles of Germany"         |                       10 | VAN1111                            |                            7 |
+| "Beaches Galore"             |                        3 | TAXI222                            |                            2 |
+| "Arrivaderci Roma"           |                        4 | TAXI111                            |                            5 |
+| "Shetland and Orkney"        |                        4 | TAXI111                            |                            3 |
+| "Disney World and Sea World" |                       10 | VAN1111                            |                            4 |
+| "Haunted house"              |                       50 | CAND123                            |                            1 |
++------------------------------+--------------------------+------------------------------------+------------------------------+
+6 rows in set (0.00 sec)
+
+Bye

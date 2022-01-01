@@ -1,0 +1,352 @@
+Warning: Using a password on the command line interface can be insecure.
+--------------
+CREATE VIEW viewtrip AS 
+SELECT passenger.first_name, passenger.last_name, bus_trip.trip_name, bus_trip.country_visited, books.trip_price 
+FROM bus_trip
+INNER JOIN books ON bus_trip.trip_id = books.trip_id
+INNER JOIN passenger ON books.passenger_id = passenger.passenger_id
+WHERE books.trip_id IS NOT NULL
+--------------
+
+Query OK, 0 rows affected (0.02 sec)
+
+--------------
+SELECT * FROM viewtrip
+--------------
+
++------------+-----------+------------------------------+-----------------+------------+
+| first_name | last_name | trip_name                    | country_visited | trip_price |
++------------+-----------+------------------------------+-----------------+------------+
+| Homer      | Simpson   | "Castles of Germany"         | Germany         | 500        |
+| Marge      | Simpson   | "Castles of Germany"         | Germany         | 500        |
+| Bart       | Simpson   | "Castles of Germany"         | Germany         | 200        |
+| Lisa       | Simpson   | "Castles of Germany"         | Germany         | 200        |
+| Maggie     | Simpson   | "Castles of Germany"         | Germany         | 200        |
+| Heidi      | Klum      | "Castles of Germany"         | Germany         | 600.99     |
+| Dwight     | Schrute   | "Castles of Germany"         | Germany         | 550        |
+| Dwight     | Schrute   | "Beaches Galore"             | Bermuda         | 600        |
+| Creed      | Bratton   | "Beaches Galore"             | Bermuda         | 600        |
+| Homer      | Simpson   | "Arrivaderci Roma"           | Italy           | 600        |
+| Marge      | Simpson   | "Arrivaderci Roma"           | Italy           | 600        |
+| Bart       | Simpson   | "Arrivaderci Roma"           | Italy           | 100        |
+| Lisa       | Simpson   | "Arrivaderci Roma"           | Italy           | 100        |
+| Maggie     | Simpson   | "Arrivaderci Roma"           | Italy           | 100        |
+| Homer      | Simpson   | "Shetland and Orkney"        | UK              | 300        |
+| Ned        | Flanders  | "Shetland and Orkney"        | UK              | 400        |
+| Michael    | Scott     | "Shetland and Orkney"        | UK              | 500        |
+| Ned        | Flanders  | "Disney World and Sea World" | USA             | 400        |
+| Todd       | Flanders  | "Disney World and Sea World" | USA             | 200        |
+| Bart       | Simpson   | "Disney World and Sea World" | USA             | 300        |
+| Lisa       | Simpson   | "Disney World and Sea World" | USA             | 300        |
+| Peter      | Griffin   | "Haunted house"              | Canada          | 900        |
++------------+-----------+------------------------------+-----------------+------------+
+22 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM viewtrip WHERE trip_name LIKE '%Castles%' ORDER BY trip_price ASC
+--------------
+
++------------+-----------+----------------------+-----------------+------------+
+| first_name | last_name | trip_name            | country_visited | trip_price |
++------------+-----------+----------------------+-----------------+------------+
+| Bart       | Simpson   | "Castles of Germany" | Germany         | 200        |
+| Maggie     | Simpson   | "Castles of Germany" | Germany         | 200        |
+| Lisa       | Simpson   | "Castles of Germany" | Germany         | 200        |
+| Marge      | Simpson   | "Castles of Germany" | Germany         | 500        |
+| Homer      | Simpson   | "Castles of Germany" | Germany         | 500        |
+| Dwight     | Schrute   | "Castles of Germany" | Germany         | 550        |
+| Heidi      | Klum      | "Castles of Germany" | Germany         | 600.99     |
++------------+-----------+----------------------+-----------------+------------+
+7 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM bus
+--------------
+
++-------------------+----------+
+| license_plate_num | capacity |
++-------------------+----------+
+| CAND123           |       50 |
+| TAXI111           |        4 |
+| TAXI222           |        3 |
+| TAXI333           |        4 |
+| UWO1122           |       70 |
+| UWO3311           |       62 |
+| VAN1111           |       10 |
+| VAN2222           |       15 |
++-------------------+----------+
+8 rows in set (0.00 sec)
+
+--------------
+DELETE FROM bus WHERE license_plate_num LIKE '%UWO%'
+--------------
+
+Query OK, 2 rows affected (0.01 sec)
+
+--------------
+SELECT * FROM bus
+--------------
+
++-------------------+----------+
+| license_plate_num | capacity |
++-------------------+----------+
+| CAND123           |       50 |
+| TAXI111           |        4 |
+| TAXI222           |        3 |
+| TAXI333           |        4 |
+| VAN1111           |       10 |
+| VAN2222           |       15 |
++-------------------+----------+
+6 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM passport
+--------------
+
++--------------+-------------+-------------+------------+
+| passport_num | citizenship | expiry_date | birth_date |
++--------------+-------------+-------------+------------+
+| GE11         | Germany     | 2027-01-01  | 1970-07-12 |
+| US10         | USA         | 2025-01-01  | 1970-02-19 |
+| US12         | USA         | 2025-01-01  | 1972-08-12 |
+| US13         | USA         | 2025-01-01  | 2001-05-12 |
+| US14         | USA         | 2025-01-01  | 2004-03-19 |
+| US15         | USA         | 2025-01-01  | 2012-09-17 |
+| US22         | USA         | 2030-04-04  | 1950-06-11 |
+| US23         | USA         | 2018-03-03  | 1940-06-24 |
+| US88         | Canada      | 2030-02-13  | 1979-04-25 |
+| US89         | Germany     | 2022-02-02  | 1976-04-08 |
+| US90         | Italy       | 2020-02-28  | 1980-04-04 |
+| US91         | Germany     | 2030-01-01  | 1959-02-02 |
+| US92         | USA         | 2025-01-01  | 1955-09-22 |
++--------------+-------------+-------------+------------+
+13 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM passenger
+--------------
+
++--------------+------------+-----------+--------------+
+| passenger_id | first_name | last_name | passport_num |
++--------------+------------+-----------+--------------+
+|           11 | Homer      | Simpson   | US10         |
+|           22 | Marge      | Simpson   | US12         |
+|           33 | Bart       | Simpson   | US13         |
+|           34 | Lisa       | Simpson   | US14         |
+|           35 | Maggie     | Simpson   | US15         |
+|           44 | Ned        | Flanders  | US22         |
+|           45 | Todd       | Flanders  | US23         |
+|           66 | Heidi      | Klum      | GE11         |
+|           77 | Michael    | Scott     | US88         |
+|           78 | Dwight     | Schrute   | US89         |
+|           79 | Pam        | Beesly    | US90         |
+|           80 | Creed      | Bratton   | US91         |
+|           90 | Peter      | Griffin   | US92         |
++--------------+------------+-----------+--------------+
+13 rows in set (0.00 sec)
+
+--------------
+DELETE FROM passport WHERE citizenship = 'Canada'
+--------------
+
+Query OK, 1 row affected (0.02 sec)
+
+--------------
+SELECT * FROM passport
+--------------
+
++--------------+-------------+-------------+------------+
+| passport_num | citizenship | expiry_date | birth_date |
++--------------+-------------+-------------+------------+
+| GE11         | Germany     | 2027-01-01  | 1970-07-12 |
+| US10         | USA         | 2025-01-01  | 1970-02-19 |
+| US12         | USA         | 2025-01-01  | 1972-08-12 |
+| US13         | USA         | 2025-01-01  | 2001-05-12 |
+| US14         | USA         | 2025-01-01  | 2004-03-19 |
+| US15         | USA         | 2025-01-01  | 2012-09-17 |
+| US22         | USA         | 2030-04-04  | 1950-06-11 |
+| US23         | USA         | 2018-03-03  | 1940-06-24 |
+| US89         | Germany     | 2022-02-02  | 1976-04-08 |
+| US90         | Italy       | 2020-02-28  | 1980-04-04 |
+| US91         | Germany     | 2030-01-01  | 1959-02-02 |
+| US92         | USA         | 2025-01-01  | 1955-09-22 |
++--------------+-------------+-------------+------------+
+12 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM passenger
+--------------
+
++--------------+------------+-----------+--------------+
+| passenger_id | first_name | last_name | passport_num |
++--------------+------------+-----------+--------------+
+|           11 | Homer      | Simpson   | US10         |
+|           22 | Marge      | Simpson   | US12         |
+|           33 | Bart       | Simpson   | US13         |
+|           34 | Lisa       | Simpson   | US14         |
+|           35 | Maggie     | Simpson   | US15         |
+|           44 | Ned        | Flanders  | US22         |
+|           45 | Todd       | Flanders  | US23         |
+|           66 | Heidi      | Klum      | GE11         |
+|           78 | Dwight     | Schrute   | US89         |
+|           79 | Pam        | Beesly    | US90         |
+|           80 | Creed      | Bratton   | US91         |
+|           90 | Peter      | Griffin   | US92         |
++--------------+------------+-----------+--------------+
+12 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM bus_trip
+--------------
+
++---------+------------------------------+------------+------------+-----------------+-------------------+
+| trip_id | trip_name                    | start_date | end_date   | country_visited | license_plate_num |
++---------+------------------------------+------------+------------+-----------------+-------------------+
+|       1 | "Castles of Germany"         | 2022-01-01 | 2022-01-17 | Germany         | VAN1111           |
+|       2 | "Tuscany Sunsets"            | 2022-03-03 | 2022-03-14 | Italy           | TAXI222           |
+|       3 | "California Wines"           | 2022-05-05 | 2022-05-10 | USA             | VAN1111           |
+|       4 | "Beaches Galore"             | 2022-04-04 | 2022-04-14 | Bermuda         | TAXI222           |
+|       5 | "Cottage Country"            | 2022-06-01 | 2022-06-22 | Canada          | CAND123           |
+|       6 | "Arrivaderci Roma"           | 2022-07-05 | 2022-07-15 | Italy           | TAXI111           |
+|       7 | "Shetland and Orkney"        | 2022-09-09 | 2022-09-29 | UK              | TAXI111           |
+|       8 | "Disney World and Sea World" | 2022-06-10 | 2022-06-20 | USA             | VAN1111           |
+|       9 | "Mertle beach"               | 2022-08-12 | 2022-08-25 | USA             | VAN1111           |
+|      10 | "Haunted house"              | 2022-06-22 | 2022-06-26 | Canada          | CAND123           |
++---------+------------------------------+------------+------------+-----------------+-------------------+
+10 rows in set (0.00 sec)
+
+--------------
+DELETE FROM bus_trip WHERE trip_name = '"California Wines"'
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+SELECT * FROM bus_trip
+--------------
+
++---------+------------------------------+------------+------------+-----------------+-------------------+
+| trip_id | trip_name                    | start_date | end_date   | country_visited | license_plate_num |
++---------+------------------------------+------------+------------+-----------------+-------------------+
+|       1 | "Castles of Germany"         | 2022-01-01 | 2022-01-17 | Germany         | VAN1111           |
+|       2 | "Tuscany Sunsets"            | 2022-03-03 | 2022-03-14 | Italy           | TAXI222           |
+|       4 | "Beaches Galore"             | 2022-04-04 | 2022-04-14 | Bermuda         | TAXI222           |
+|       5 | "Cottage Country"            | 2022-06-01 | 2022-06-22 | Canada          | CAND123           |
+|       6 | "Arrivaderci Roma"           | 2022-07-05 | 2022-07-15 | Italy           | TAXI111           |
+|       7 | "Shetland and Orkney"        | 2022-09-09 | 2022-09-29 | UK              | TAXI111           |
+|       8 | "Disney World and Sea World" | 2022-06-10 | 2022-06-20 | USA             | VAN1111           |
+|       9 | "Mertle beach"               | 2022-08-12 | 2022-08-25 | USA             | VAN1111           |
+|      10 | "Haunted house"              | 2022-06-22 | 2022-06-26 | Canada          | CAND123           |
++---------+------------------------------+------------+------------+-----------------+-------------------+
+9 rows in set (0.00 sec)
+
+ERROR 1451 (23000) at line 24: Cannot delete or update a parent row: a foreign key constraint fails (`32_assign2db`.`books`, CONSTRAINT `books_ibfk_1` FOREIGN KEY (`trip_id`) REFERENCES `bus_trip` (`trip_id`))
+--------------
+DELETE FROM bus_trip WHERE trip_name = '"Arrivaderci Roma"'
+--------------
+
+--------------
+SELECT * FROM passenger
+--------------
+
++--------------+------------+-----------+--------------+
+| passenger_id | first_name | last_name | passport_num |
++--------------+------------+-----------+--------------+
+|           11 | Homer      | Simpson   | US10         |
+|           22 | Marge      | Simpson   | US12         |
+|           33 | Bart       | Simpson   | US13         |
+|           34 | Lisa       | Simpson   | US14         |
+|           35 | Maggie     | Simpson   | US15         |
+|           44 | Ned        | Flanders  | US22         |
+|           45 | Todd       | Flanders  | US23         |
+|           66 | Heidi      | Klum      | GE11         |
+|           78 | Dwight     | Schrute   | US89         |
+|           79 | Pam        | Beesly    | US90         |
+|           80 | Creed      | Bratton   | US91         |
+|           90 | Peter      | Griffin   | US92         |
++--------------+------------+-----------+--------------+
+12 rows in set (0.00 sec)
+
+--------------
+DELETE FROM passenger WHERE first_name = 'Pam'
+--------------
+
+Query OK, 1 row affected (0.01 sec)
+
+--------------
+SELECT * FROM passenger
+--------------
+
++--------------+------------+-----------+--------------+
+| passenger_id | first_name | last_name | passport_num |
++--------------+------------+-----------+--------------+
+|           11 | Homer      | Simpson   | US10         |
+|           22 | Marge      | Simpson   | US12         |
+|           33 | Bart       | Simpson   | US13         |
+|           34 | Lisa       | Simpson   | US14         |
+|           35 | Maggie     | Simpson   | US15         |
+|           44 | Ned        | Flanders  | US22         |
+|           45 | Todd       | Flanders  | US23         |
+|           66 | Heidi      | Klum      | GE11         |
+|           78 | Dwight     | Schrute   | US89         |
+|           80 | Creed      | Bratton   | US91         |
+|           90 | Peter      | Griffin   | US92         |
++--------------+------------+-----------+--------------+
+11 rows in set (0.00 sec)
+
+--------------
+SELECT * FROM viewtrip
+--------------
+
++------------+-----------+------------------------------+-----------------+------------+
+| first_name | last_name | trip_name                    | country_visited | trip_price |
++------------+-----------+------------------------------+-----------------+------------+
+| Homer      | Simpson   | "Castles of Germany"         | Germany         | 500        |
+| Marge      | Simpson   | "Castles of Germany"         | Germany         | 500        |
+| Bart       | Simpson   | "Castles of Germany"         | Germany         | 200        |
+| Lisa       | Simpson   | "Castles of Germany"         | Germany         | 200        |
+| Maggie     | Simpson   | "Castles of Germany"         | Germany         | 200        |
+| Heidi      | Klum      | "Castles of Germany"         | Germany         | 600.99     |
+| Dwight     | Schrute   | "Castles of Germany"         | Germany         | 550        |
+| Dwight     | Schrute   | "Beaches Galore"             | Bermuda         | 600        |
+| Creed      | Bratton   | "Beaches Galore"             | Bermuda         | 600        |
+| Homer      | Simpson   | "Arrivaderci Roma"           | Italy           | 600        |
+| Marge      | Simpson   | "Arrivaderci Roma"           | Italy           | 600        |
+| Bart       | Simpson   | "Arrivaderci Roma"           | Italy           | 100        |
+| Lisa       | Simpson   | "Arrivaderci Roma"           | Italy           | 100        |
+| Maggie     | Simpson   | "Arrivaderci Roma"           | Italy           | 100        |
+| Homer      | Simpson   | "Shetland and Orkney"        | UK              | 300        |
+| Ned        | Flanders  | "Shetland and Orkney"        | UK              | 400        |
+| Ned        | Flanders  | "Disney World and Sea World" | USA             | 400        |
+| Todd       | Flanders  | "Disney World and Sea World" | USA             | 200        |
+| Bart       | Simpson   | "Disney World and Sea World" | USA             | 300        |
+| Lisa       | Simpson   | "Disney World and Sea World" | USA             | 300        |
+| Peter      | Griffin   | "Haunted house"              | Canada          | 900        |
++------------+-----------+------------------------------+-----------------+------------+
+21 rows in set (0.00 sec)
+
+--------------
+DELETE FROM passenger WHERE last_name = 'Simpson'
+--------------
+
+Query OK, 5 rows affected (0.01 sec)
+
+--------------
+SELECT * FROM viewtrip
+--------------
+
++------------+-----------+------------------------------+-----------------+------------+
+| first_name | last_name | trip_name                    | country_visited | trip_price |
++------------+-----------+------------------------------+-----------------+------------+
+| Ned        | Flanders  | "Disney World and Sea World" | USA             | 400        |
+| Ned        | Flanders  | "Shetland and Orkney"        | UK              | 400        |
+| Todd       | Flanders  | "Disney World and Sea World" | USA             | 200        |
+| Heidi      | Klum      | "Castles of Germany"         | Germany         | 600.99     |
+| Dwight     | Schrute   | "Beaches Galore"             | Bermuda         | 600        |
+| Dwight     | Schrute   | "Castles of Germany"         | Germany         | 550        |
+| Creed      | Bratton   | "Beaches Galore"             | Bermuda         | 600        |
+| Peter      | Griffin   | "Haunted house"              | Canada          | 900        |
++------------+-----------+------------------------------+-----------------+------------+
+8 rows in set (0.00 sec)
+
+Bye
